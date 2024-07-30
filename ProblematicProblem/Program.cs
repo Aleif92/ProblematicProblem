@@ -5,42 +5,86 @@ using System.Threading;
 
 namespace ProblematicProblem
 {
-    public abstract class Program
+    public  class Program
 
     {
-   
-     
 
-    private static List<string> activities = new List<string>()
+        public static bool cont = true;
+
+        public static List<string> activities = new List<string>()
         { "Movies", "Paintball", "Bowling", "Lazer Tag,", "LAN Party", "Hiking", "Axe Throwing", "Wine Tasting" };
 
-    private static void Main(string[] args)
-    {
+        private static void Main(string[] args)
+      {
         Console.Write(
             "Hello, welcome to the random activity generator! \nWould you like to generate a random activity? yes/no: ");
-        bool cont;
-        var contResponse = Console.ReadLine().ToLower();
-        if (contResponse == "yes")
+        var userResponse = Console.ReadLine().ToLower();
+        while (userResponse != "yes" && userResponse != "no")
         {
-            cont = true;
+            Console.WriteLine("Invalid response, please type yes or no.");
+            userResponse = Console.ReadLine().ToLower();
         }
-        else
+
+      
+        if (userResponse == "no")
         {
-            cont = false;
+            Console.WriteLine("Goodbye!");
+            return;
         }
+
+        
+         
         
         Console.WriteLine();
         Console.Write("We are going to need your information first! What is your name? ");
         string userName = Console.ReadLine();
         Console.WriteLine();
         Console.Write("What is your age? ");
-        int userAge = int.Parse(Console.ReadLine());
-        Console.WriteLine();
-        Console.Write("Would you like to see the current list of activities? Sure/No thanks: ");
-        bool seeList = Console.ReadLine().ToLower() == "sure";
-        
-        if (seeList)
+        int userAge;
+        while (!int.TryParse(Console.ReadLine(), out  userAge))
         {
+            Console.WriteLine("Invalid respose, please type a valid age.");
+            
+        }
+        
+        
+        
+        Console.WriteLine();
+        Console.WriteLine("Would you like to see the current list of activities? Sure/No thanks: ");
+        userResponse = Console.ReadLine().ToLower();
+        
+        
+        while(userResponse != "sure" && userResponse != "no thanks")
+        {
+            Console.WriteLine("Invalid response, please type sure or no thanks.");
+            userResponse = Console.ReadLine().ToLower();
+        }
+
+        if (userResponse == "sure")
+        {
+            foreach (string activity in activities)
+            {
+                Console.Write($"{activity} ");
+                Thread.Sleep(250);
+            }
+        }
+        
+
+        Console.WriteLine();
+        Console.Write("Would you like to add any activities before we generate one? yes/no: ");
+        userResponse = Console.ReadLine().ToLower();
+
+        while (userResponse != "yes" && userResponse != "no")
+        {
+            Console.WriteLine("Invalid response, please type yes/no:");
+            userResponse = Console.ReadLine().ToLower();
+        }
+        Console.WriteLine();
+        while (userResponse == "yes")
+        {
+            Console.Write("What would you like to add? ");
+            string userAddition = Console.ReadLine();
+            activities.Add(userAddition);
             foreach (string activity in activities)
             {
                 Console.Write($"{activity} ");
@@ -48,24 +92,18 @@ namespace ProblematicProblem
             }
 
             Console.WriteLine();
-            Console.Write("Would you like to add any activities before we generate one? yes/no: ");
-            var addToList = bool.Parse(Console.ReadLine());
-            Console.WriteLine();
-            while (addToList)
+            Console.WriteLine("Would you like to add more? yes/no: ");
+            userResponse = Console.ReadLine().ToLower();
+        
+        
+            while(userResponse != "yes" && userResponse != "no")
             {
-                Console.Write("What would you like to add? ");
-                string userAddition = Console.ReadLine();
-                activities.Add(userAddition);
-                foreach (string activity in activities)
-                {
-                    Console.Write($"{activity} ");
-                    Thread.Sleep(250);
-                }
-                Console.WriteLine();
-                Console.WriteLine("Would you like to add more? yes/no: ");
-                 addToList = bool.Parse(Console.ReadLine());
+                Console.WriteLine("Invalid response, please type yes/no.");
+                userResponse = Console.ReadLine().ToLower();
             }
         }
+        
+
 
         while (cont)
         {
@@ -83,6 +121,7 @@ namespace ProblematicProblem
                 Console.Write(". ");
                 Thread.Sleep(500);
             }
+
             Random rng = new Random();
 
             Console.WriteLine();
@@ -93,16 +132,31 @@ namespace ProblematicProblem
                 Console.WriteLine($"Oh no! Looks like you are too young to do {randomActivity}");
                 Console.WriteLine("Pick something else!");
                 activities.Remove(randomActivity);
-                 randomNumber = rng.Next(activities.Count);
-                 randomActivity = activities[randomNumber];
+                randomNumber = rng.Next(activities.Count);
+                randomActivity = activities[randomNumber];
             }
+
 
             Console.Write(
                 $"Ah got it! {userName}, your random activity is: {randomActivity}! Is this ok or do you want to grab another activity? Keep/Redo: ");
             Console.WriteLine();
-             cont = (Console.ReadLine().ToLower() == "redo");
-             Console.WriteLine("Thanks for you using our app!");
+
+                 userResponse = Console.ReadLine().ToLower();
+
+                 while (userResponse != "keep" && userResponse != "redo")
+                 {
+                     Console.WriteLine("That was an invalid option. Please type Keep/Redo");
+                     userResponse = Console.ReadLine().ToLower();
+                 }
+
+                 if (userResponse == "keep")
+                 {
+                     cont = false;
+                 }
+            
+            
+            Console.WriteLine("Thanks for you using our app!");
         }
-    }
+      }
     }
 }
